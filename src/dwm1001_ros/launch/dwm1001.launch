@@ -1,0 +1,36 @@
+<launch>
+
+    <!--Exctract info from dwm1001 dev boards, filter them and publish them into topics-->
+    <node pkg="localizer_dwm1001" type="dwm1001_main.py" name="tag_sinistra" output="screen">
+
+        <param name="serial_port_name"      value="/dev/ttyACM0" /> <!-- Name of serial port -->
+        <param name="serial_baud_rate"      value="115200" />  <!--Baudrate of serial port-->
+        <param name="topicname"      value="tag0" /> 
+
+    </node>
+    <node pkg="localizer_dwm1001" type="dwm1001_main.py" name="tag_destra" output="screen">
+
+        <param name="serial_port_name"      value="/dev/ttyACM1" /> <!-- Name of serial port -->
+        <param name="serial_baud_rate"      value="115200" />  <!--Baudrate of serial port-->
+        <param name="topicname"      value="tag1" /> 
+
+    </node>
+    <node pkg="localizer_dwm1001" type="dwm1001_main.py" name="tag_centro" output="screen">
+
+        <param name="serial_port_name"      value="/dev/ttyACM2" /> <!-- Name of serial port -->
+        <param name="serial_baud_rate"      value="115200" />  <!--Baudrate of serial port-->
+        <param name="topicname"      value="tag2" /> 
+
+    </node>
+    <arg name="gui" default="true" />
+    <param name="robot_description" textfile="/home/mdore/ros/human-gazebo/humanSubject01/humanSubject01_66dof_colored.urdf" />
+    <param name="use_gui" value="$(arg gui)"/>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <!-- Display topics of anchors and tag into markers so we can view them into Rviz-->
+    <node pkg="localizer_dwm1001" type="dwm1001_displayMap.py" name="display_dwm1001" output="screen" />
+    <!-- Run rviz with the saved rviz file-->
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find localizer_dwm1001)/rviz/dwm1001_network.rviz" />
+
+
+</launch>
